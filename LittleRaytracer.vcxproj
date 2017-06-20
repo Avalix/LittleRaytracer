@@ -19,7 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Image.cpp" />
     <ClCompile Include="Source\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\Base.h" />
+    <ClInclude Include="Include\Color.h" />
+    <ClInclude Include="Include\Image.h" />
+    <ClInclude Include="Include\stb\stb_image_write.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A819083E-CF2E-4155-A998-20FB2022E2A3}</ProjectGuid>
@@ -95,6 +102,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
