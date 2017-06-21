@@ -12,28 +12,26 @@ namespace LittleRaytracer
 		}
 
 		Color(float r, float g, float b, float a = 1.0f)
+			: R(r)
+			, G(g)
+			, B(b)
+			, A(a)
 		{
-			mChannels[0] = r;
-			mChannels[1] = g;
-			mChannels[2] = b;
-			mChannels[3] = a;
+
 		}
 
-		inline float GetR() const { return mChannels[0]; }
-		inline float GetG() const { return mChannels[1]; }
-		inline float GetB() const { return mChannels[2]; }
-		inline float GetA() const { return mChannels[3]; }
 
-		inline void SetR(float r) { mChannels[0] = r; }
-		inline void SetG(float g) { mChannels[1] = g; }
-		inline void SetB(float b) { mChannels[2] = b; }
-		inline void SetA(float a) { mChannels[3] = a; }
+		inline float operator[](int i) const;
+		inline float& operator[](int i);
 
-		inline float operator[](int i) const { return mChannels[i]; }
-		inline float& operator[](int i) { return mChannels[i]; }
+		inline static Color Lerp(const Color& a, const Color& b, float t);
 
-	private:
-		float mChannels[4]; //RGBA;
+		float R;
+		float G;
+		float B;
+		float A;
 
 	};
 }
+
+#include "Color.inl"

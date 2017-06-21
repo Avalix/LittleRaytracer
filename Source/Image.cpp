@@ -1,10 +1,10 @@
 #include "Base.h"
 
-#include "..\Include\Image.h"
+#include "../Include/Image.h"
 #include "Color.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb\stb_image_write.h"
+#include "3rdParty/stb/stb_image_write.h"
 
 using namespace LittleRaytracer;
 
@@ -76,10 +76,10 @@ void Image::SetPixel(uint32_t x, uint32_t y, Color color)
 {
 	int pixelIndex = x * NUM_CHANNELS + y * mImageWidth * NUM_CHANNELS;
 
-	mImageData[pixelIndex]     = char(255.0f * color.GetR());
-	mImageData[pixelIndex + 1] = char(255.0f * color.GetG());
-	mImageData[pixelIndex + 2] = char(255.0f * color.GetB());
-	mImageData[pixelIndex + 3] = char(255.0f * color.GetA());
+	mImageData[pixelIndex]     = char(255.0f * color.R);
+	mImageData[pixelIndex + 1] = char(255.0f * color.G);
+	mImageData[pixelIndex + 2] = char(255.0f * color.B);
+	mImageData[pixelIndex + 3] = char(255.0f * color.A);
 }
 
 Color Image::GetPixel(uint32_t x, uint32_t y) const

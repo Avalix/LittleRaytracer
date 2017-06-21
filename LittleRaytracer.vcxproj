@@ -23,10 +23,17 @@
     <ClCompile Include="Source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\3rdParty\stb\stb_image_write.h" />
     <ClInclude Include="Include\Base.h" />
     <ClInclude Include="Include\Color.h" />
     <ClInclude Include="Include\Image.h" />
-    <ClInclude Include="Include\stb\stb_image_write.h" />
+    <ClInclude Include="Include\Maths\Maths.h" />
+    <ClInclude Include="Include\Maths\Ray.h" />
+    <ClInclude Include="Include\Maths\Vector3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Include\Color.inl" />
+    <None Include="Include\Maths\Vector3.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A819083E-CF2E-4155-A998-20FB2022E2A3}</ProjectGuid>
