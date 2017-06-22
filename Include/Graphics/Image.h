@@ -3,10 +3,10 @@
 #include <cstdint>
 #include <memory>
 
-using ImageBufferPtr = std::unique_ptr<char[]>;
-
 namespace LittleRaytracer
 {
+	using ImageBufferPtr = std::unique_ptr<char[]>;
+
 	class Color;
 
 	//Represents an RGBA image that can be written to disk

@@ -73,6 +73,17 @@ namespace LittleRaytracer
 		return a;
 	}
 
+	inline Vector3& operator/=(Vector3& a, float k)
+	{
+		float oneOverK = 1.0f / k;
+
+		a.X *= oneOverK; 
+		a.Y *= oneOverK; 
+		a.Z *= oneOverK;
+
+		return a;
+	}
+
 	inline Vector3 operator-(const Vector3& a)
 	{
 		return Vector3(-a.X, -a.Y, -a.Z);
@@ -99,6 +110,18 @@ namespace LittleRaytracer
 	inline Vector3 operator*(float k, Vector3 a)
 	{
 		a *= k;
+		return a;
+	}
+
+	inline Vector3 operator/(Vector3 a, float k)
+	{
+		a /= k;
+		return a;
+	}
+
+	inline Vector3 operator/(float k, Vector3 a)
+	{
+		a /= k;
 		return a;
 	}
 

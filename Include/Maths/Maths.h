@@ -158,6 +158,74 @@ namespace LittleRaytracer
 		{
 			return fabs(a);
 		}
+
+		//Returns -1.0f if a is negative, 0.0f is a == 0.0f or 1.0f if a is positive
+		inline float Sign(float a)
+		{
+			return static_cast<float>((a > 0.0f) - (a < 0.0f));
+		}
+
+		//Solve a quadratic equation (aX^2 + bX + c) reutning the solutions in root0Out and root1Out.
+		//Returns false if there is no solution (root0Out and root1Out are undefined) or true is solutions exist
+		//if only one solution exists, root0Out == root1Out
+		inline bool SolveQuadratic(float a, float b, float c, float& root0Out, float& root1Out)
+		{
+			assert(a != 0.0f);
+
+			//Uses a more stable versions to prevent catastrophic cancellation - disccused here
+			//https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
+			
+			//only works for b != 0.0f so handle that here
+			if(b != 0.0f)
+			{
+				float d = b * b - 4.0f * a * c;
+
+				if(d < 0.0f)
+				{
+					return false;
+				}
+				else if (d == 0.0f)
+				{
+					root0Out = -0.5f * b * a;
+					root1Out = root0Out;
+				}
+				else
+				{
+					float q = -0.5f * (b + Sign(b) * Sqrt(d));
+
+					root0Out = q / a;
+					root1Out = c / q;
+				}
+			}
+			else
+			{
+				float d = -4.0f * a * c;
+
+				if(d < 0.0f)
+				{
+					return false;
+				}
+				else if(d == 0.0f)
+				{
+					root0Out = 0.0f;
+					root1Out = 0.0f;
+				}
+				else
+				{
+					float sqrt = Sqrt(d);
+
+					root0Out = sqrt / (2.0f * a);
+					root1Out = -root0Out;
+				}
+			}
+			
+			if (root0Out > root0Out) 
+			{
+				std::swap(root0Out, root0Out); 
+			}
+
+			return true;
+		}
 	}
 }
 

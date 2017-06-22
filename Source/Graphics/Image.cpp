@@ -1,7 +1,7 @@
 #include "Base.h"
 
-#include "../Include/Image.h"
-#include "Color.h"
+#include "Graphics/Image.h"
+#include "Graphics/Color.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "3rdParty/stb/stb_image_write.h"
