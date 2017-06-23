@@ -40,6 +40,23 @@ namespace LittleRaytracer
 		{
 			return mUniformDist(mMTRandGen);
 		}
+
+		Vector3 GetRandomPointInUnitSphere()
+		{
+			auto angleA = GetValue() * FMath::Constants::PI;
+			auto angleB = GetValue() * FMath::Constants::TWO_PI;
+			auto radius = FMath::Sqrt(GetValue());
+
+			auto sinA = FMath::Sin(angleA);
+			auto cosA = FMath::Cos(angleA);
+			auto sinB = FMath::Sin(angleB);
+			auto cosB = FMath::Cos(angleB);
+
+			return Vector3(
+				radius * sinA * cosB,
+				radius * sinA * sinB,
+				radius * cosA);
+		}
 		
 
 	private:

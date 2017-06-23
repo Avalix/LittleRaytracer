@@ -8,6 +8,9 @@
 #include "Entities/Sphere.h"
 #include "Graphics/Camera.h"
 #include "Maths/Random.h"
+#include "Maths/HitResult.h"
+#include "Materials/LambertianDiffuse.h"
+#include "Materials/Metal.h"
 
 using namespace LittleRaytracer;
 
@@ -31,22 +34,35 @@ void CheckForMemoryLeaks()
 }
 #endif
 
-
-Color GetColorforRay(const Ray& ray, const Scene scene)
+template<class Base, class Derived, class ... Args>
+std::shared_ptr<Base> MakeSharedOfBase(Args && ... args)
 {
-	HitResult hitResult;
+	return std::static_pointer_cast<Base>(std::make_shared<Derived>(args...));
+}
 
-	if(scene.TryHitWithRay(ray, 0.0f, FLT_MAX, hitResult))
+
+Color DoTrace(const Ray& ray, const Scene& scene, UniformRandom& rand, int depth)
+{
+	if(depth <= 0)
 	{
-		return Color(
-			0.5f * (hitResult.HitNormal.X + 1.0f), 
-			0.5f * (hitResult.HitNormal.Y + 1.0f), 
-			0.5f * (hitResult.HitNormal.Z + 1.0f));
+		//terminate Ray
+		return Color(0.0f, 0.0f, 0.0f);
 	}
 
-	float normVert = 0.5f * (ray.Direction.Y + 1.0f);
-	return Color::Lerp(Color(1.0f, 1.0f, 1.0f), Color(0.5f, 0.7f, 1.0f), normVert);
+	HitResult hitResult;
+
+	if(scene.CastRayIntoScene(ray, 0.001f, FLT_MAX, hitResult))
+	{
+		Ray nextRay = hitResult.Material->CalculateScatterRay(hitResult, rand);
+		return hitResult.Material->GetColor() * DoTrace(nextRay, scene, rand, depth-1);
+	}
+
+	//hit nothing, so sample sky
+	return Scene::GetSkyColor(ray);
 }
+
+const uint32_t NUM_SAMPLES_PER_PIXEL = 16;
+const uint32_t MAX_RAY_DEPTH = 8;
 
 int main()
 {
@@ -54,16 +70,47 @@ int main()
 	{
 		Camera Camera(Vector3(0.0f, 0.0f, 0.0f), 4.0f, 2.0f, 1.0f);
 
-		Image testImage(600, 300);
+		Image testImage(400, 200);
 
 		Scene testScene;
 
-		testScene.AddWorldObject(WorldObjectPtr(new Sphere(Vector3(0.0f, 0.0f,1.0f), 0.5f)));
-		testScene.AddWorldObject(WorldObjectPtr(new Sphere(Vector3(0.0f, -100.5f, 1.0f), 100.0f)));
+		testScene.AddWorldObject(MakeSharedOfBase<SceneObject, Sphere>(
+			Vector3(0.0f, 0.0f, 1.0f), 
+			0.5f, 
+			MakeSharedOfBase<Material, LambertianDiffuse>(
+				Color(0.8f, 0.3f, 0.3f)
+				)
+			));
+
+		testScene.AddWorldObject(MakeSharedOfBase<SceneObject, Sphere>(
+			Vector3(0.0f, -100.5f, 1.0f), 
+			100.0f, 
+			MakeSharedOfBase<Material, LambertianDiffuse>(
+				Color(0.8f, 0.8f, 0.0f)
+				)
+			));	
+
+		testScene.AddWorldObject(MakeSharedOfBase<SceneObject, Sphere>(
+			Vector3(1.0f, 0.0f, 1.0f), 
+			0.5f, 
+			MakeSharedOfBase<Material, Metal>(
+				Color(0.8f, 0.6f, 0.2f),
+				0.0f
+				)
+			));
+
+		testScene.AddWorldObject(MakeSharedOfBase<SceneObject, Sphere>(
+			Vector3(-1.0f, 0.0f, 1.0f), 
+			0.5f, 
+			MakeSharedOfBase<Material, Metal>(
+				Color(0.8f, 0.8f, 0.8f),
+				0.25f
+				)
+			));
 
 		UniformRandom rand(0.0f, 1.0f);
 			
-		const uint32_t NUM_SAMPLES_PER_PIXEL = 32;
+		
 
 		std::cout << "Generating Image 'Test.png' (" <<
 			testImage.GetImageWidth() << "x" << testImage.GetImageHeight() <<
@@ -73,7 +120,7 @@ int main()
 		{
 			for(uint32_t y = 0; y < testImage.GetImageHeight(); ++y)
 			{
-				std::cout << "Calculating Pixel " << x << "x" << y << "           \r";
+				//std::cout << "Calculating Pixel " << x << "x" << y << "           \r";
 				Color color(0.0f, 0.0f, 0.0f);
 				for(uint32_t sampleID = 0; sampleID < NUM_SAMPLES_PER_PIXEL; ++sampleID)
 				{
@@ -81,11 +128,15 @@ int main()
 					float v = 1.0f - ((float(y) + rand.GetValue()) / testImage.GetImageHeight());
 
 					Ray ray = Camera.GetRay(u , v);
-					color += GetColorforRay(ray, testScene);
+					color += DoTrace(ray, testScene, rand, MAX_RAY_DEPTH);
 				}
 
 				color /= float(NUM_SAMPLES_PER_PIXEL);
 				color.A = 1.0f;
+
+				const float GAMMA_CORRECTION_VALUE = 1.0f / 2.2f;
+
+				color = Color::ApplyGamma(color, GAMMA_CORRECTION_VALUE);
 
 				testImage.SetPixel(x, y, color);
 			}

@@ -23,16 +23,22 @@
     <ClCompile Include="Source\Entities\Scene.cpp" />
     <ClCompile Include="Source\Graphics\Image.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Materials\LambertianDiffuse.cpp" />
+    <ClCompile Include="Source\Materials\Metal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\3rdParty\stb\stb_image_write.h" />
     <ClInclude Include="Include\Base.h" />
+    <ClInclude Include="Include\Materials\LambertianDiffuse.h" />
+    <ClInclude Include="Include\Materials\Material.h" />
+    <ClInclude Include="Include\Materials\Metal.h" />
+    <ClInclude Include="Include\Maths\HitResult.h" />
     <ClInclude Include="Include\Maths\Random.h" />
     <ClInclude Include="Include\Entities\Scene.h" />
     <ClInclude Include="Include\Graphics\Camera.h" />
     <ClInclude Include="Include\Graphics\Color.h" />
     <ClInclude Include="Include\Entities\Sphere.h" />
-    <ClInclude Include="Include\Entities\WorldObject.h" />
+    <ClInclude Include="Include\Entities\SceneObject.h" />
     <ClInclude Include="Include\Graphics\Image.h" />
     <ClInclude Include="Include\Maths\Maths.h" />
     <ClInclude Include="Include\Maths\Ray.h" />

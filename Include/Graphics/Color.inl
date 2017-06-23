@@ -64,6 +64,15 @@ namespace LittleRaytracer
 			FMath::Lerp(a.A, b.A, t));
 	}
 
+	inline Color Color::ApplyGamma(const Color& a, float gamma)
+	{
+		return Color(
+			FMath::Pow(a.R, gamma),
+			FMath::Pow(a.G, gamma),
+			FMath::Pow(a.B, gamma),
+			a.A);
+	}
+
 	inline Color& operator+=(Color& a, const Color& b)
 	{
 		a.R += b.R; 

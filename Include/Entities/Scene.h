@@ -1,23 +1,22 @@
 #pragma once
 #include <vector>
-#include "WorldObject.h"
-#include <memory>
+#include "SceneObject.h"
 
 namespace LittleRaytracer
 {
-	using WorldObjectPtr = std::shared_ptr<WorldObject>;
+	class SceneObject;
 
-	class WorldObject;
-
-	class Scene : public WorldObject
+	class Scene
 	{		
 	public:
-		void AddWorldObject(const WorldObjectPtr& worldObject);
-		void RemoveWorldObject(const WorldObjectPtr& worldObject);
+		void AddWorldObject(const SceneObjectPtr& worldObject);
+		void RemoveWorldObject(const SceneObjectPtr& worldObject);
 
-		bool TryHitWithRay(const Ray& ray, float tIntervalMin, float tIntervalMax, 
-			HitResult& hitResultOut) const override;
+		bool CastRayIntoScene(const Ray& ray, float tIntervalMin, float tIntervalMax, 
+			HitResult& hitResultOut) const;
+
+		static Color GetSkyColor(const Ray& ray);
 	private:
-		std::vector<WorldObjectPtr> mWorldObjects;
+		std::vector<SceneObjectPtr> mWorldObjects;
 	};
 }

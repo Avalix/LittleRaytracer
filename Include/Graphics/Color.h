@@ -26,6 +26,8 @@ namespace LittleRaytracer
 
 		inline static Color Lerp(const Color& a, const Color& b, float t);
 
+		inline static Color ApplyGamma(const Color& a, float gamma);
+
 		float R;
 		float G;
 		float B;

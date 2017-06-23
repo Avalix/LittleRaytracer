@@ -1,6 +1,7 @@
 #include "Base.h"
 
 #include "Entities/Sphere.h"
+#include "Maths/HitResult.h"
 
 using namespace LittleRaytracer;
 
@@ -40,11 +41,14 @@ bool Sphere::TryHitWithRay(const Ray& ray, float tIntervalMin, float tIntervalMa
 		}
 	}
 
-	hitResultOut.RayT = t1;
-	hitResultOut.HitPoint = ray.PointAlongRayAtT(t1);
-	
-	//We already know that radius is the length of this vector, so manually normalise to save some cycles
-	hitResultOut.HitNormal = (hitResultOut.HitPoint - Center) / Radius;
+	Vector3 hitPoint = ray.PointAlongRayAtT(t1);
+
+	hitResultOut = HitResult(
+		ray,
+		t1,
+		hitPoint,
+		(hitPoint - Center) / Radius, //Length == Radius, so manually normalise to save perf 
+		Material);
 
 	return true;
 }

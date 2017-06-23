@@ -28,7 +28,7 @@ namespace LittleRaytracer
 		inline static float Length(const Vector3& a);
 		inline static float LengthSquared(const Vector3& a);
 		inline static Vector3 Normalize(const Vector3& a);
-
+		inline static Vector3 Reflect(const Vector3& a, const Vector3& Normal);
 
 		float X;
 		float Y;

@@ -169,4 +169,9 @@ namespace LittleRaytracer
 
 		return Vector3(a.X * OneOverLength, a.Y * OneOverLength, a.Z * OneOverLength);
 	}
+
+	inline Vector3 Vector3::Reflect(const Vector3& a, const Vector3& normal)
+	{
+		return a - 2.0f * Dot(a, normal) * normal;
+	}
 }
